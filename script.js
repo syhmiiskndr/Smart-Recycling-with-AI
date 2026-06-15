@@ -199,19 +199,35 @@ function showLoading(isLoading) {
 }
 
 async function startWebcam() {
-  try {
-    document.getElementById("webcamContainer").classList.remove("hidden");
-    document.getElementById("inputSection").classList.add("hidden");
-
-    const video = document.getElementById("webcamVideo");
-    const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-
-    video.srcObject = stream;
-  } catch (error) {
-    alert("Camera access failed. Please allow camera permission.");
-    console.error(error);
+    try {
+      document.getElementById("webcamContainer").classList.remove("hidden");
+      document.getElementById("inputSection").classList.add("hidden");
+  
+      const video = document.getElementById("webcamVideo");
+  
+      const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+  
+      const cameraConfig = isMobile
+        ? {
+            video: {
+              facingMode: { ideal: "environment" },
+              width: { ideal: 1280 },
+              height: { ideal: 720 }
+            },
+            audio: false
+          }
+        : {
+            video: true,
+            audio: false
+          };
+  
+      const stream = await navigator.mediaDevices.getUserMedia(cameraConfig);
+      video.srcObject = stream;
+    } catch (error) {
+      alert("Camera access failed. Please allow camera permission.");
+      console.error(error);
+    }
   }
-}
 
 function stopWebcam() {
   const video = document.getElementById("webcamVideo");
