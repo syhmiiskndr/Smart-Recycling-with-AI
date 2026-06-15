@@ -693,6 +693,16 @@
       padding-left: 16px;
       padding-right: 16px;
     }
+
+    body {
+      background:
+        radial-gradient(
+          circle at -10% -10%,
+          rgba(34, 197, 94, 0.08),
+          transparent 25%
+        ),
+        #020617;
+    }
   
     .navbar {
       align-items: flex-start;
