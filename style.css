@@ -706,13 +706,21 @@
   
     .navbar {
       align-items: flex-start;
-      gap: 16px;
+      gap: 26px;
       flex-direction: column;
+      padding-bottom: 38px;
     }
   
     .nav-btn {
       width: 100%;
       text-align: center;
+      margin-top: 4px;
+    }
+
+    .brand {
+      padding-bottom: 18px;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.16);
+      width: 100%;
     }
   
     .hero {
