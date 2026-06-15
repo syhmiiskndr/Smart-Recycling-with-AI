@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EcoVision AI | Smart Recycling Platform</title>
+  <link rel="stylesheet" href="style.css" />
+
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.7.4"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8.4/dist/teachablemachine-image.min.js"></script>
+</head>
+
+<body>
+  <main class="app">
+    <nav class="navbar">
+      <div class="brand">
+        <div class="brand-mark">EV</div>
+        <div>
+          <h1>EcoVision AI</h1>
+          <p>Smart Recycling Intelligence</p>
+        </div>
+      </div>
+
+      <a href="#classifier" class="nav-btn">Launch Classifier</a>
+    </nav>
+
+    <section class="hero">
+      <div class="hero-grid">
+        <div class="hero-content">
+          <span class="badge">AI Recycling Classification System</span>
+          <h2>Computer vision for smarter waste sorting.</h2>
+          <p>
+            EcoVision AI identifies recyclable materials using an image classification model
+            trained to recognize plastic, paper, glass, and metal.
+          </p>
+
+          <div class="hero-actions">
+            <a href="#classifier" class="btn primary hero-btn">Start Analysis</a>
+            <a href="#how" class="btn secondary hero-btn">View Workflow</a>
+          </div>
+        </div>
+
+        <div class="hero-card">
+          <div class="scan-box">
+            <div class="scan-line"></div>
+            <p>AI Vision Module</p>
+            <h3>Material Recognition Active</h3>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="stats">
+      <div class="stat-card">
+        <h3>4</h3>
+        <p>Material Categories</p>
+      </div>
+      <div class="stat-card">
+        <h3>224x224</h3>
+        <p>Model Image Input</p>
+      </div>
+      <div class="stat-card">
+        <h3>CNN</h3>
+        <p>Classification Model</p>
+      </div>
+      <div class="stat-card">
+        <h3>Web-Based</h3>
+        <p>Accessible Platform</p>
+      </div>
+    </section>
+
+    <section class="materials">
+      <div class="section-header">
+        <span class="badge">Supported Materials</span>
+        <h3>Designed for common recyclable waste.</h3>
+      </div>
+
+      <div class="material-grid">
+        <div class="material-card">
+          <div class="material-visual plastic"></div>
+          <h4>Plastic</h4>
+          <p>Bottles, containers, packaging, and plastic-based waste.</p>
+        </div>
+
+        <div class="material-card">
+          <div class="material-visual paper"></div>
+          <h4>Paper</h4>
+          <p>Documents, newspapers, cardboard-like paper, and printed materials.</p>
+        </div>
+
+        <div class="material-card">
+          <div class="material-visual glass"></div>
+          <h4>Glass</h4>
+          <p>Bottles, jars, and transparent recyclable glass items.</p>
+        </div>
+
+        <div class="material-card">
+          <div class="material-visual metal"></div>
+          <h4>Metal</h4>
+          <p>Cans, tins, aluminium, and other metallic recyclable materials.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="classifier" class="workspace">
+      <div class="panel input-panel">
+        <span class="panel-label">Input</span>
+        <h3>Upload Material Image</h3>
+        <p class="section-desc">Provide a clear image with one main object for better classification.</p>
+
+        <div id="inputSection">
+          <label for="imageUpload" class="upload-box" id="dropArea">
+            <strong>Drop image here</strong>
+            <span>or click to browse JPG, PNG, JPEG</span>
+          </label>
+          <input type="file" id="imageUpload" accept="image/*" />
+
+          <button id="webcamBtn" class="btn primary">Use Camera</button>
+        </div>
+
+        <div id="webcamContainer" class="webcam-container hidden">
+          <video id="webcamVideo" autoplay playsinline></video>
+          <div class="button-row">
+            <button id="captureBtn" class="btn primary">Capture</button>
+            <button id="stopWebcamBtn" class="btn secondary">Close Camera</button>
+          </div>
+        </div>
+
+        <div id="previewContainer" class="preview-container hidden">
+          <img id="previewImage" alt="Uploaded preview" />
+        </div>
+      </div>
+
+      <div class="panel result-panel">
+        <span class="panel-label">Output</span>
+        <h3>AI Classification Result</h3>
+        <p class="section-desc">The model will display prediction confidence and recycling guidance.</p>
+
+        <div id="loadingSpinner" class="loading hidden">
+          <div class="loader"></div>
+          <p>Running AI classification...</p>
+        </div>
+
+        <div id="emptyState" class="empty-state">
+          <h4>No image analyzed yet</h4>
+          <p>Upload or capture an image to begin material classification.</p>
+        </div>
+
+        <div id="resultsContainer" class="hidden">
+          <div class="result-card">
+            <span id="statusBadge" class="status-badge">Ready</span>
+            <p class="result-title">Detected Material</p>
+            <h4 id="materialType">Unknown</h4>
+            <p id="confidence">Confidence: 0%</p>
+          </div>
+
+          <div class="analysis-block">
+            <h4>Model Confidence Analysis</h4>
+            <div id="allResults"></div>
+          </div>
+
+          <div class="analysis-block">
+            <h4>Recycling Recommendation</h4>
+            <p id="tips">Recommendation will be generated after classification.</p>
+          </div>
+
+          <button id="resetBtn" class="btn secondary">Analyze Another Image</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="how" class="process">
+      <div class="section-header">
+        <span class="badge">System Workflow</span>
+        <h3>How EcoVision AI processes images.</h3>
+      </div>
+
+      <div class="process-flow">
+        <div class="process-step">
+          <span>01</span>
+          <h4>Image Input</h4>
+          <p>User uploads or captures a waste material image.</p>
+        </div>
+
+        <div class="process-step">
+          <span>02</span>
+          <h4>Preprocessing</h4>
+          <p>The image is resized and prepared for model prediction.</p>
+        </div>
+
+        <div class="process-step">
+          <span>03</span>
+          <h4>AI Analysis</h4>
+          <p>The trained model compares visual features across classes.</p>
+        </div>
+
+        <div class="process-step">
+          <span>04</span>
+          <h4>Recommendation</h4>
+          <p>The system returns the material class and recycling advice.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="about">
+      <div>
+        <span class="badge">About Platform</span>
+        <h3>Built for sustainable waste awareness.</h3>
+      </div>
+      <p>
+        EcoVision AI is a web-based recycling classification prototype designed to support
+        responsible waste management through accessible computer vision technology.
+      </p>
+    </section>
+
+    <footer>
+      <div class="footer-brand">
+        <div class="brand-mark">EV</div>
+        <div>
+          <h4>EcoVision AI</h4>
+          <p>Powered by TensorFlow.js and Teachable Machine</p>
+        </div>
+      </div>
+      <p>EcoVision AI © 2026. Sustainable Waste Management Platform.</p>
+    </footer>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
